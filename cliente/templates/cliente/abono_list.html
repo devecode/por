@@ -1,0 +1,65 @@
+{% extends 'base/home.html' %}
+{% load humanize %}
+{% block body %}
+<br>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Abonos</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <a href="{% url 'cliente:abono_nuevo'  %}">
+                  <button type="button" class="btn btn-block bg-gradient-success">Nuevo Abono</button>
+                </a>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+{% if user.is_staff %}  
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>NOMBRE</th>
+                  <th>NÚMERO DE VENTA</th>
+                  <th>ABONO</th>
+                  <th>FECHA DE ABONO</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for co in obj %}
+                    <tr>
+                      <td>{{ co.nombre }}</td>
+                      <td>{{ co.num_venta }}</td>
+                      <td>${{ co.abono | intcomma }}</td>
+                      <td>{{ co.fa }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+{% endif %}
+</div>
+{% endblock body %}

@@ -1,0 +1,414 @@
+{% extends 'base/home.html' %}
+{% load humanize %}
+{% load static %}
+{% block body %}
+
+    <script src="{% static 'plugins/highcharts.js' %}"></script>
+    <script src="{% static 'plugins/modules/data.js' %}"></script>
+    <script src="{% static 'plugins/modules/drilldown.js' %}"></script>
+    <script src="{% static 'plugins/modules/exporting.js' %}"></script>
+    <script src="{% static 'plugins/modules/export-data.js' %}"></script>
+    <script src="{% static 'plugins/modules/accessibility.js' %}"></script>
+
+
+<div class="content-wrapper">
+{% if user.username == 'ADRIANA' %}
+  <div class="row">
+    <div class="col-lg col-12">
+      <!-- small card -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3>{{v_dia}}</h3>
+  
+          <p>VENTAS DIARIAS</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg col-12">
+      <!-- small card -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3>{{pro.masimo}}</h3>
+  
+          <p>{{pro.producto__nombre}}</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          PRODUCTO MÁS VENDIDO
+        </a>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% if user.username == 'MARLENE' %}
+  <div class="row">
+    <div class="col-lg col-12">
+      <!-- small card -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3>{{v_dia}}</h3>
+  
+          <p>VENTAS DIARIAS</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg col-12">
+      <!-- small card -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3>{{pro.masimo}}</h3>
+  
+          <p>{{pro.producto__nombre}}</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          PRODUCTO MÁS VENDIDO
+        </a>
+      </div>
+    </div>
+  </div>
+{% endif %}
+<div class="row">
+  {% if user.is_staff %}
+    <div class="col-md-12">
+            <div id="container"></div>
+    </div>
+  <div class="col-lg col-12">
+    <!-- small card -->
+    <div class="small-box bg-danger">
+      <div class="inner">
+        <h3>${{inversion.total | floatformat:2 | intcomma }}</h3>
+
+        <p>TOTAL DE INVERSIÓN</p>
+      </div>
+      <div class="icon">
+        <i class="ion ion-stats-bars"></i>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="row">
+    <div class="col-lg col-12">
+      <!-- small card -->
+      <div class="small-box bg-warning">
+        <div class="inner">
+          <h3>{{pro_total.total | intcomma}}</h3>
+  
+          <p>TOTAL DE PRODUCTOS EN STOCK</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          VER PRODUCTOS
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col-lg-6 col-8">
+        <!-- small card -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3>{{venta| intcomma}}<sup style="font-size: 20px"></sup></h3>
+
+            <p>Ventas Totales</p>
+          </div>
+          <div class="icon">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-8">
+          <!-- small card -->
+          <div class="small-box bg-success">
+          <div class="inner">
+             <h3>${{ingreso.total__sum | floatformat:2 | intcomma}}</h3>
+  
+              <p>INGRESOS TOTALES</p>
+          </div>
+          <div class="icon">
+          </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-12">
+    <div id="container2"></div>
+  </div>
+  <div class="row">
+    <div class="col-lg col-12">
+      <!-- small card -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3>{{pro.masimo}}</h3>
+  
+          <p>{{pro.producto__nombre}}</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          PRODUCTO MÁS VENDIDO EN GENERAL
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg col-12">
+      <!-- small card -->
+      <div class="small-box bg-warning">
+        <div class="inner">
+          <h3>{{producto}}</h3>
+  
+          <p>TOTAL DE PRODUCTOS</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          VER PRODUCTOS
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-lg-6 col-8">
+          <!-- small card -->
+          <div class="small-box bg-success">
+          <div class="inner">
+              <h3>${{ ing_dia.total__sum | floatformat:2 | intcomma }}<sup style="font-size: 20px"></sup></h3>
+  
+              <p>Ingreso por Día</p>
+          </div>
+          <div class="icon">
+          </div>
+          </div>
+      </div>
+      <div class="col-lg-6 col-8">
+        <!-- small card -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3>${{ ga_dia.total | floatformat:2 | intcomma}}</h3>
+  
+            <p>Ganancia por Día</p>
+          </div>
+          <div class="icon">
+          </div>
+        </div>
+      </div>
+  </div>
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small card -->
+        <div class="small-box bg-success">
+        <div class="inner">
+            <h3>${{ga_mes.total| floatformat:2 | intcomma}}<sup style="font-size: 20px"></sup></h3>
+
+            <p>GANANCIA MENSUAL</p>
+        </div>
+        <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          GANANCIA MENSUAL
+        </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <!-- small card -->
+      <div class="small-box bg-warning">
+        <div class="inner">
+          <h3>{{v_dia}}</h3>
+
+          <p>Ventas por Día</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          Ventas Totales por Día
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <!-- small card -->
+      <div class="small-box bg-info">
+        <div class="inner">
+          <h3>{{ pro_mas.total}}</h3>
+          <p>{{ pro_mas.producto__nombre }}</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          Producto + vendido al día
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <!-- small card -->
+      <div class="small-box bg-danger">
+        <div class="inner">
+          <h3>{{pro_men.total }}</h3>
+          <h5>{{ing_f}}</h5>
+
+          <p>{{pro_men.producto__nombre}}</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <a href="#" class="small-box-footer">
+          Producto - vendido al día 
+        </a>
+      </div>
+    </div>
+</div>
+<script type="application/javascript">
+        // Create the chart
+    Highcharts.chart('container', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Ganancias Mensuales'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>$ {point.y:.2f}</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '$'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: $ {point.y:.2f}'
+            }
+        }
+    },
+    series: [{
+        name: 'Ganancias',
+        colorByPoint: true,
+        data: [{
+            name: 'Octubre',
+            y: {{oct.total}},
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Noviembre',
+            y: 0
+        }, {
+            name: 'Diciembre',
+            y: 0
+        }, {
+            name: 'Enero',
+            y: 0
+        }, {
+            name: 'Febrero',
+            y: 0
+        }, {
+            name: 'Marzo',
+            y: 0
+        }, {
+            name: 'Abril',
+            y: 0
+        }, {
+            name: 'Mayo',
+            y: 0
+        }, {
+            name: 'Junio',
+            y: 0
+        }]
+    }]
+});
+</script>
+<script type="application/javascript">
+        // Create the chart
+    Highcharts.chart('container2', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Ingresos Mensuales'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>$ {point.y:.2f}</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '$'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: $ {point.y:.2f}'
+            }
+        }
+    },
+    series: [{
+        name: 'Ingresos',
+        colorByPoint: true,
+        data: [{
+            name: 'Octubre',
+            y: {{venta_oct.total}},
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Noviembre',
+            y: 0
+        }, {
+            name: 'Diciembre',
+            y: 0
+        }, {
+            name: 'Enero',
+            y: 0
+        }, {
+            name: 'Febrero',
+            y: 0
+        }, {
+            name: 'Marzo',
+            y: 0
+        }, {
+            name: 'Abril',
+            y: 0
+        }, {
+            name: 'Mayo',
+            y: 0
+        }, {
+            name: 'Junio',
+            y: 0
+        }]
+    }]
+});
+</script>
+{% endif %}
+</div>
+{% endblock body %}

@@ -1,0 +1,73 @@
+{% extends 'base/home.html' %}
+{% load humanize %}
+{% block body %}
+<br>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Corte Diario</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <a href="{% url 'contabilidad:corte_nuevo'  %}">
+                  <button type="button" class="btn btn-block bg-gradient-success">Nuevo Corte</button>
+                </a>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+{% if user.is_staff %}  
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>FECHA</th>
+                  <th>USUARIO</th>
+                  <th>TOTAL VENTA EN EFECTIVO</th>
+                  <th>TOTAL VENTA EN TARJETA</th>
+                  <th>TOTAL EN EFECTIVO</th>
+                  <th>TOTAL VENTA</th>
+                  <th>EGRESOS</th>
+                  <th>EFECTIVO</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for co in obj %}
+                    <tr>
+                      <td>{{ co.fechaCorte }}</td>
+                      <td>{{ co.usuario }}</td>
+                      <td>${{ co.venta_efectivo | intcomma }}</td>
+                      <td>${{ co.venta_tarjeta | intcomma }}</td>
+                      <td>${{ co.total_efectivo | intcomma }}</td>
+                      <td>${{ co.total_venta | intcomma }}</td>
+                      <td>${{ co.egresos | intcomma }}</td>
+                      <td>${{ co.efectivo | intcomma }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+{% endif %}
+</div>
+{% endblock body %}

@@ -1,0 +1,88 @@
+{% extends 'base/home.html' %}
+{% load humanize %}
+{% block body %}
+<br>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Producto</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <a href="{% url 'inv:producto_nuevo'  %}">
+                  <button type="button" class="btn btn-block bg-gradient-success">Nuevo Producto</button>
+                </a>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+  
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>IMPRIMIR CÓDIGO BARRAS</th>
+                  <th>NOMBRE</th>
+                  <th>CATEGORIA</th>
+                  <th>IMAGEN</th>
+                  <th>CADUCIDAD</th>
+                  <th>CODIGO DE BARRA</th>
+                  <th>DESCUENTO</th>
+                  <th>PRECIO CON DESCUENTO</th>
+                  <th>PRECIO DE COMPRA</th>
+                  <th>PRECIO DE VENTA</th>
+                  <th>GANANCIA</th>
+                  <th>STOCK INICIAL</th>
+                  <th>STOCK FINAL</th>
+                  <th>EDITAR</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for pro in obj %}
+                    <tr>
+                      <td><a href="{% url 'inv:generar_barras'  pro.id %}" target="_blank" class="href btn btn-primary btn-circle">
+                          <i class="fa fa-print"></i>
+                      </a></td>
+                      <td>{{ pro.nombre }}</td>
+                      <td>{{ pro.categoria }}</td>
+                      <td><img style="width: 100%;" src="{{ pro.img.url }}"></td>
+                      <td>{{ pro.caducidad }}</td>
+                      <td>{{ pro.codigo_barra }}</td>
+                      <td>{{ pro.descuento }}</td>
+                      <td>{{ pro.precio_descuento }}</td>
+                      <td>{{ pro.precio_compra }}</td>
+                      <td>{{ pro.precio_venta }}</td>
+                      <td>{{ pro.ganancia }}</td>
+                      <td>{{ pro.stock_inicial }}</td>
+                      <td>{{ pro.stock_final }}</td>
+                      <td><a href="{% url 'inv:producto_edit'  pro.id %}" class="href btn btn-warning btn-circle">
+                          <i class="fa fa-edit"></i>
+                      </a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+</div>
+{% endblock body %}

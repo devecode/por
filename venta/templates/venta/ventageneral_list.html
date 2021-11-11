@@ -1,0 +1,80 @@
+{% extends 'base/home.html' %}
+{% load humanize %}
+{% block body %}
+<br>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Ventas</h1>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+  
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>VOLVER A IMPRIMIR</th>
+                  <th>NÚMERO DE VENTA</th>
+                  <th>TOTAL DE ARTICULOS</th>
+                  <th>METODO DE PAGO</th>
+                  <th>FECHA DE CREACIÓN</th>
+                  <th>VENDEDOR</th>
+                  <th>SUB-TOTAL</th>
+                  <th>SUB-TOTAL DESCUENTO</th>
+                  <th>DESCUENTO</th>
+                  <th>TOTAL</th>
+                  <th>CLIENTE</th>
+                  <th>TOTAL DEL ADEUDO</th>
+                  <th>¿YA PAGO?</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for ven in obj %}
+                    <tr>
+                      <td>
+                        <a href="{% url 'venta:ticket' ven.id %}" target="_blank"
+                            class="href btn btn-success btn-circle">
+                            <i class="fas fa-print"></i>
+                        </a>
+                    </td>
+                      <td>{{ ven.pk }}</td>
+                      <td>{{ ven.articulo_total }}</td>
+                      <td>{{ ven.metodo_pago }}</td>
+                      <td>{{ ven.fc }}</td>
+                      <td>{{ ven.vendedor }}</td>
+                      <td>${{ ven.sub_total | intcomma}}</td>
+                      <td>${{ ven.subtotal_descuento | intcomma}}</td>
+                      <td>${{ ven.descuento | intcomma}}</td>
+                      <td>${{ ven.total | intcomma}}</td>
+                      <td>{{ ven.cliente }}</td>
+                      <td>${{ ven.resto_total | intcomma}}</td>
+                      <td>{{ ven.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+</div>
+{% endblock body %}

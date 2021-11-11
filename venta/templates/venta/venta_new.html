@@ -1,0 +1,552 @@
+{% extends 'base/home.html' %}
+{% block body %}
+  <div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Nueva venta</h1>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <!--         BUSQUEDA DE PRODUCTOS       -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="card card-orange card-outline">
+            <div class="card-header">
+              <h3 class="text-center display-6">Buscar productos en existencia</h3>
+              <section class="content">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-12">
+
+                      <!--          TABLA DE BUSQUEDA           -->     
+                      <div class="card">
+                        <div class="card-header">
+                          <h3 class="card-title">PRODUCTOS EN EXISTENCIA</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                              <tr>
+                                <th>Nombre</th>
+                                <th>Stock</th>
+                                <th>Código de Barra</th>
+                              </tr>
+                            </thead>
+                            {% if productos %}
+                            {% for producto in productos %}
+                            <tr>
+                              <td>{{producto.nombre}}</td>
+                              <td>{{producto.stock_final}}</td>
+                              <td>{{producto.codigo_barra }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                          </table>
+                        </div>
+                        <!--          /.TABLA DE BUSQUEDA          -->
+                      </div>
+                      <div class="card card-green card-outline">
+                        <div class="card-header">
+                          <h3 class="text-center display-6">Venta</h3>
+
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <!-- text input -->
+                              <div class="form-group">
+                                <label>Cantidad</label>
+                                <input type="number" class="form-control" id="cantidad" placeholder="Cantidad" value="1" >
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label>Código de Barra</label>
+                                <input type="text" class="form-control" id="codigoBarras" placeholder="Código" onchange="busquedaBarra();">
+                              </div>
+                            </div>
+                          </div>
+
+                          <!--           ./BUSQUEDA DE PRODUCTOS           -->
+
+                          <!--           TABLA DE PRODUCTOS              -->
+                          <div class="card-body">
+                            <table id="tablaPedido" class="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Cantidad</th>
+                                  <th>Código</th>
+                                  <th>Producto</th>
+                                  <th>Precio</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                </tr>
+                              </tbody>
+                             
+                            </table>
+                          </div>
+                          <!--                       ./TABLA DE PRODUCTOS             -->
+
+
+                          <!--     PRECIO TOTAL    -->  
+                          <div class="card-body">
+                           <aside style="text-align:">
+                            <div class="row">
+                              <div style="text-align:right" class="col-10">
+                                <div class="row">
+                                  <div class="col">
+                                    <label for="sub_total">Sub Total: $</label>
+                                  </div>
+                                  <div id="sub_total" class="col-15">
+                                    0
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col">
+                                    <label for="sub_total">Iva: $</label>
+                                  </div>
+                                  <div id='iva' class="col-15">
+                                    0
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col">
+                                    <label for="sub_total">Descuento: $</label>
+                                  </div>
+                                  <div id='descuento' class="col-15">
+                                    0
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col">
+                                    <label for="sub_total">Total: $</label>
+                                  </div>
+                                  <div id='total' class="col-15">
+                                    0
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </aside>
+                        </div>
+
+                        <!--     ./PRECIO TOTAL     -->
+
+
+                        <!--     BOTON DE IMPRIMIR  -->
+                        <a onclick="pagarPedido()">                    
+                          <td>
+                           <button id='botonPago' type="button" class="btn btn-block btn-outline-success btn-lg disaabled" disabled>Pagar</button>
+                         </td>
+                       </a>
+                       <br>
+                       <!--     BOTON DE IMPRIMIR  
+                       <a href="#">                    
+                        <td>
+                         <button type="button" class="btn btn-block btn-outline-warning btn-lg">Imprimir Ticket</button>
+                       </td>
+                     </a>-->
+
+                     <!--    ./BOTON DE IMPRIMIR  -->                     
+
+                     <!-- /.card-body -->
+                   </div>
+                   <!-- /.card -->
+                 </div>
+                 <!-- /.col -->
+               </div>
+               <!-- /.row -->
+             </div>
+             <!-- /.container-fluid -->
+           </section>
+         </div> <!-- /.card-body -->
+       </div>
+     </div><!-- /.container-fluid -->
+   </section>
+
+   <div class="modal fade" id="modalPago" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirmación de pago</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6">
+                <label for="recipient-name" class="col-form-label">Total:</label>
+                <input id='modalTotal' type="number" value="0" class="form-control" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="recipient-name" class="col-form-label">Pago en efectivo:</label>
+                <input id='modalEfectivo' onchange="calcularCambio()" type="number" class="form-control" value="0" step="0.01">
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <label for="recipient-name" class="col-form-label">Restante:</label>
+                <input id='modalRestante' type="number" class="form-control" value="0" step="0.01" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="recipient-name" class="col-form-label">Deuda Crédito:</label>
+                <input id='modalTarjeta' onchange="calcularCambio()" type="number" class="form-control" value="0" step="0.01">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <label for="recipient-name" class="col-form-label">Cliente:</label>
+                <select id="clienteSeleccionado" class="form-select" aria-label="Default select example">
+                  <option value='0' selected>----</option>
+                  {% if clientes %}
+                    {% for cliente in clientes %}
+                      <option value={{cliente.id}}>{{cliente.nombre}}</option>
+                    {% endfor %}
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <label for="recipient-name" class="col-form-label">Cambio:</label>
+                <input id='modalCambio' type="number" value="0" class="form-control" readonly>
+              </div>
+            </div>
+  
+            <div  class="form-group text-center text-danger" >
+              <label id="callBack" for="recipient-name" class="col-form-label" hidden>Ocurrio un problema</label>
+            </div>
+          </div>
+        </div>
+  
+        <div class="modal-footer">
+          <button onclick="cancelar()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button  onclick="validateForm()" type="button" class="btn btn-success">Aplicar venta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+   <!-- /.content -->
+ </div>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+
+{% csrf_token %}
+<script>
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+</script>
+
+<!-- Page specific script -->
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+
+  function cancelar(){
+    $('#callBack').text("");
+    $('#callBack').attr("hidden");
+    $('#modalRestante').val("0");
+    $('#modalCambio').val("0");
+  }
+
+function pad(input, length, padding) { 
+  var str = input + "";
+  return (length <= str.length) ? str : pad(str+padding, length, padding);
+}
+
+  function calcularCambio(){
+    let tarjeta =  parseFloat($('#modalTarjeta').val()).toFixed(1);
+    let efectivo = $('#modalEfectivo').val();
+    
+    centavos = pad(parseFloat(efectivo.split(".")[1]),2,5);
+    pesos = parseFloat(efectivo.split(".")[0]);
+
+    if (centavos >= 50){centavos = 50;}
+    else{centavos = 0;}
+
+    efectivo = pesos + (centavos/100);
+
+    $('#modalEfectivo').val((efectivo).toFixed(2));
+
+    let total = parseFloat($('#modalTotal').val());
+    let subtotal = parseFloat(total-tarjeta);
+    let restante = parseFloat(subtotal-efectivo);
+    
+    if (restante > 0 ){
+      $('#modalRestante').val(restante.toFixed(2));  
+    }else{
+      $('#modalRestante').val("0");  
+    }
+   
+    if (efectivo > subtotal){
+      let cambio = (efectivo-subtotal).toFixed(2).toString(); 
+
+      cam_centavos = parseFloat(cambio.split(".")[1]);
+      cam_pesos = parseFloat(cambio.split(".")[0]);
+
+
+      if (cam_centavos == 0){
+        cam_centavos = 0;
+      }else if (cam_centavos < 26){
+        cam_centavos = 0;
+      }else if(cam_centavos < 76 ){
+        cam_centavos = 50;
+      }else{
+        cam_centavos = 0;
+        cam_pesos += 1;
+      }
+
+      
+      let cambio_real = cam_pesos+(cam_centavos/100);
+      $('#modalCambio').val(cambio_real.toFixed(2));
+      $('#modalRestante').val("0");
+    }else{
+      $('#modalCambio').val("0");
+    }
+  }
+
+
+  function validateForm(){
+    $('#callBack').attr("hidden");
+    let efectivo = parseFloat($("#modalEfectivo").val());
+    let tarjeta = parseFloat($('#modalTarjeta').val());
+    let total = parseFloat($('#modalTotal').val());
+    
+
+    if (((efectivo-$('#modalCambio').val())+tarjeta) >= total){
+      $('#callBack').attr("hidden");
+      enviarVenta(efectivo-$('#modalCambio').val(),tarjeta);
+
+    }else{
+      $('#callBack').text("Los montos no coinciden");
+      $('#callBack').removeAttr("hidden");
+    }
+    
+  }
+
+  function limpiezaDatos(){
+    $('#sub_total').text("0");
+   $('#descuento').text("0");
+   $('#iva').text("0");
+   $('#total').text("0");
+   $( ".productoTabla" ).remove();
+   $("#cantidad").val("1");
+   $('#botonPago').attr("disabled");
+   $('#botonPago').addClass('disabled');
+   $('#modalRestante').val("0");
+    $('#modalCambio').val("0");
+    $('#callBack').text("Ocurrió un problema");
+  }
+
+
+  function enviarVenta(efectivo, tarjeta){
+
+    const obj = JSON.parse('{"productos" : []}');
+    var table = document.getElementById("tablaPedido");
+    for (var i = 0, row; row = table.rows[i]; i++) {
+      for (var j = 0, col; col = row.cells[j]; j++) {
+       if (col.id == 'codigo'){
+        obj.productos.push({ "producto" : col.innerHTML, "cantidad" : row.cells[j-1].innerHTML} );
+       }
+      }  
+    }
+
+    var clienteSeleccionado = $('#clienteSeleccionado').find(":selected").val();
+    obj["cliente"]=clienteSeleccionado;
+    obj["efectivo"]=efectivo;
+    obj["tarjeta"]=tarjeta;
+    obj["user"]='{{user}}';
+    
+    
+    //console.log(obj);
+    
+    /*$.post("/aplicacionVenta", obj, function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });*/
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange= function () {
+        if (request.readyState==4) {
+            //handle response
+            if (request.status == 200){
+              $("#modalPago").modal('hide');
+              limpiezaDatos();
+              console.log("Respuesta: " + request.responseText)
+              imprimirTicket(request.responseText);
+              return true;
+            }else{
+              console.log("ocurrio un problema");
+              //$("#callBack").show(1000);
+              $('#callBack').text("Ocurrió un problema");
+              $('#callBack').removeAttr("hidden");
+              
+              limpiezaDatos();
+              return true;
+            }
+        }
+    }
+    request.open("POST", "/aplicacionVenta", true);
+    request.setRequestHeader("X-CSRFToken", csrftoken);
+    request.setRequestHeader("Content-Type","application/json");
+    request.send(JSON.stringify(obj));
+  }
+
+  function cargarClientes(){
+    console.log("Si se entra o no");
+    let url = '/busquedaCliente/'
+    let http = new XMLHttpRequest()
+    http.open("GET", url)
+    http.onreadystatechange = function(){
+        console.log("algo masmdasd");
+        if(this.readyState == 4 && this.status == 200){
+           let resultado = JSON.parse(this.responseText);
+           console.log(responseText);
+        }
+    } 
+
+  }
+
+  function pagarPedido(){
+    cargarClientes();
+    $("#modalEfectivo").val("0");
+    $('#modalTarjeta').val("0");
+    $('#modalTotal').val($('#total').text());
+
+    let total = $('#modalTotal').val();
+    centavos = parseFloat(total.split(".")[1]);
+    pesos = parseFloat(total.split(".")[0]);
+    if (centavos >= 0 && centavos < 24 ){
+      centavos = 0;
+    }else if(centavos <= 74){
+      centavos = 50;
+    }else{
+      centavos = 0
+      pesos = pesos + 1;
+    }
+    total = pesos + (centavos/100);
+    $('#modalTotal').val(total.toFixed(2));
+    $('#modalPago').modal('show');
+  }
+
+  function imprimirTicket(response){
+    window.open("ticketVenta/"+response, "Impresión de ticket", "width=300, height=400");
+  }
+
+  function busquedaBarra(){
+    let productoBarra = document.getElementById("codigoBarras").value;
+
+    let url = '/codigoBarras/'+productoBarra
+    let http = new XMLHttpRequest()
+    http.open("GET", url)
+    http.onreadystatechange = function(){
+
+        if(this.readyState == 4 && this.status == 200){
+            let resultado = JSON.parse(this.responseText)
+            let codigo = resultado[0].fields.codigo_barra;
+            let nombre =resultado[0].fields.nombre;
+            let desc =resultado[0].fields.descripcion;
+            let precio = resultado[0].fields.precio_venta;
+            let cantidad = parseFloat(document.getElementById("cantidad").value);
+            let cantPrecio = (parseFloat(precio)*parseFloat(cantidad));
+            console.log("respoonse: " , resultado)
+            let inTable = false 
+            var table = document.getElementById("tablaPedido");
+            for (var i = 0, row; row = table.rows[i]; i++) {
+              for (var j = 0, col; col = row.cells[j]; j++) {
+                
+               if (col.id == 'codigo' && col.innerHTML == codigo) {
+                  let celda =  parseFloat(row.cells[j-1].innerHTML);
+                  $('#'+codigo+'c').text(celda + cantidad);
+                  inTable = true;
+                  let descu = parseFloat(resultado[0].fields.descuento);
+                  sumarPrecios(cantPrecio,(cantPrecio*(descu/100)));
+                  break;
+               }
+              }  
+            }
+            if (!inTable){
+              $('#tablaPedido tr:last').after('<tr class=\"productoTabla\"><td id=\''+codigo+'c\'>'+cantidad +'</td><td id=\'codigo\'>'+codigo +'</td><td>'+ nombre+'</td><td>'+precio+'</td></tr>');
+              let descu = parseFloat(resultado[0].fields.descuento);
+              sumarPrecios(cantPrecio,(cantPrecio*(descu/100)));
+               
+            }
+            
+
+            $('#codigoBarras').val('');
+            $('#botonPago').removeAttr("disabled");
+            $('#botonPago').removeClass('disabled');
+
+        }
+        if(this.readyState == 4 && this.status == 400){
+          console.log("El producto no existe");
+        }  
+    }
+    http.send()
+  }
+
+  function sumarPrecios(sub_total, desc ){
+
+   let subtotal = parseFloat($('#sub_total').text());
+   let descuento = parseFloat($('#descuento').text());
+  
+   let sub_sub=parseFloat((subtotal + sub_total).toFixed(2));
+   let desc_desc = parseFloat((descuento + desc).toFixed(2));
+   
+   $('#sub_total').text(sub_sub);
+   $('#descuento').text(desc_desc);
+   
+   let ivas = parseFloat((((sub_sub)/1.16)).toFixed(2));
+   let iva = parseFloat(((sub_sub-ivas)).toFixed(2));
+   $('#iva').text(iva);
+
+   let total = parseFloat(sub_sub - desc_desc);
+   console.log(typeof(sub_sub));
+   $('#total').text(total.toFixed(2));
+  }
+
+
+  
+
+
+
+</script>
+{%endblock body%}
